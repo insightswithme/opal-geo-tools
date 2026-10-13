@@ -1,0 +1,25 @@
+{
+  "id": "geo_info_agent",
+  "name": "Global Country & State Directory",
+  "handle": "geo-info",
+  "description": "Fetches ISO codes, capitals, currencies, and all sub-national states/provinces for any given country.",
+  "interaction_mode": "multi-turn",
+  "cwd": "/workspace",
+  "input_variables": [
+    {
+      "name": "countryNameOrCode",
+      "type": "String",
+      "required": true,
+      "default": "US"
+    },
+    {
+      "name": "includeDetails",
+      "type": "Boolean",
+      "required": false,
+      "default": true
+    }
+  ],
+  "prompt_template": "You are a geographic data specialist.\n\n### Instructions\n1. Use the `get_country_details` tool with `query=\"[[countryNameOrCode]]\"`.\n2. Using the resolved ISO-2 country code, call `get_states_by_country` to retrieve all states/provinces.\n3. Format the final output cleanly:\n   - **Overview:** Flag, ISO-2 / ISO-3 codes, Capital, Currency, Region, and Total States count.\n   - **States/Provinces Table:** Columns: `State Name`, `Code (ISO-2/FIPS)`, and `Type` (State/Province/Union Territory).\n4. If the user provided an invalid or ambiguous country, list closest matches rather than hallucinating.",
+  "output_type": "Markdown",
+  "tools": ["get_country_details", "get_states_by_country"]
+}

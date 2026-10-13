@@ -1,0 +1,62 @@
+{
+  "id": "cms-geo-dropdown-workflow",
+  "name": "CMS Country → State Dropdown",
+  "description": "Populate cascading country/state fields in an Optimizely form or CMS workflow using the geo tool REST API, or invoke the @geo-info agent for rich Markdown summaries.",
+  "steps": [
+    {
+      "id": "load-countries",
+      "type": "http",
+      "method": "GET",
+      "url": "{{GEO_TOOLS_BASE_URL}}/api/countries",
+      "map_response": {
+        "field": "countryDropdown",
+        "options_path": "countries",
+        "value_key": "value",
+        "label_key": "label"
+      }
+    },
+    {
+      "id": "load-states",
+      "type": "http",
+      "method": "GET",
+      "url": "{{GEO_TOOLS_BASE_URL}}/api/countries/{{form.country}}/states",
+      "trigger": "onChange:country",
+      "map_response": {
+        "field": "stateDropdown",
+        "options_path": "states",
+        "value_key": "value",
+        "label_key": "label"
+      }
+    },
+    {
+      "id": "enrich-selection",
+      "type": "http",
+      "method": "POST",
+      "url": "{{GEO_TOOLS_BASE_URL}}/api/workflow/geo-lookup",
+      "trigger": "onSubmit",
+      "body": {
+        "countryNameOrCode": "{{form.country}}",
+        "includeDetails": true
+      },
+      "map_response": {
+        "store_as": "geoLookup"
+      }
+    },
+    {
+      "id": "optional-agent-summary",
+      "type": "opal_agent",
+      "agent_handle": "geo-info",
+      "trigger": "manual | automation",
+      "input_variables": {
+        "countryNameOrCode": "{{form.country}}",
+        "includeDetails": true
+      },
+      "prompt": "@geo-info Summarize country and states for {{form.country}}"
+    }
+  ],
+  "embed": {
+    "dropdown_demo": "/",
+    "iframe_snippet": "<iframe src=\"{{GEO_TOOLS_BASE_URL}}/\" title=\"Country and state picker\" style=\"width:100%;min-height:640px;border:0;border-radius:12px;\"></iframe>",
+    "agent_chat_example": "@geo-info Give me all states for India and Australia"
+  }
+}

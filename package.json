@@ -1,0 +1,32 @@
+{
+  "name": "opal-geo-tools",
+  "version": "1.0.0",
+  "description": "Opal custom tools and agent for country / state / province lookup, plus CMS dropdown embed.",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "node -e \"console.log('Use npm run dev and curl the endpoints — see README.')\""
+  },
+  "keywords": [
+    "opal",
+    "optimizely",
+    "geo",
+    "country",
+    "state"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "country-state-city": "^3.2.1",
+    "dotenv": "^18.0.7",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "~5.7.3"
+  }
+}
